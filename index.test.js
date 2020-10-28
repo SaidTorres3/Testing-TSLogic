@@ -9,6 +9,7 @@ const TheObject = {
         array: [4,2,6,1,6788],
         txt: "Le Peper",
         boolean: true,
+        f: 94
     }
 }
 
@@ -64,6 +65,9 @@ test('Operador equivalencia.', () => {
     expect(apply(["$==", "Pepito", "Camotes"])).toBe(false)
     expect(apply(["$==", "El pepe", "El pepe"])).toBe(true)
     expect(apply(["$==", 1, "1"])).toBe(true)
+    expect(apply(["$==", ["$", "xp", "f"], 94], TheObject)).toBe(true)
+    expect(apply(["$==", ["$", "xp", "f"], 94.5], TheObject)).toBe(false)
+    expect(apply(["$==", ["$", "xp", "f"], ["$", "xp", "c"]], TheObject)).toBe(true)
 })
 
 test('Operador de negación de equivalencia.', () => {
@@ -73,6 +77,9 @@ test('Operador de negación de equivalencia.', () => {
     expect(apply(["$!=", "Hola", 10])).toBe(true)
     expect(apply(["$!=", "El pepe", "El pepe"])).toBe(false)
     expect(apply(["$!=", "Pepito", "Camotes"])).toBe(true)
+    expect(apply(["$!=", ["$", "xp", "f"], 94], TheObject)).toBe(false)
+    expect(apply(["$!=", ["$", "xp", "f"], 94.5], TheObject)).toBe(true)
+    expect(apply(["$!=", ["$", "xp", "f"], ["$", "xp", "c"]], TheObject)).toBe(false)
 })
 
 test('Operador equivalencia estricta.', () => {
@@ -80,6 +87,10 @@ test('Operador equivalencia estricta.', () => {
     expect(apply(["$===", "10", 10])).toBe(false)
     expect(apply(["$===", 10.00001, 10])).toBe(false)
     expect(apply(["$===", (5, 7, 5), (5, 7, 5)])).toBe(true)
+    expect(apply(["$===", ["$", "xp", "f"], 94], TheObject)).toBe(true)
+    expect(apply(["$===", ["$", "xp", "f"], 94.5], TheObject)).toBe(false)
+    expect(apply(["$===", ["$", "xp", "f"], ["$", "xp", "c"]], TheObject)).toBe(true)
+    
 })
 
 test('Operador de negación de equivalecia estricta.', () => {
@@ -87,6 +98,9 @@ test('Operador de negación de equivalecia estricta.', () => {
     expect(apply(["$!==", "10", 10])).toBe(true)
     expect(apply(["$!==", 10.00001, 10])).toBe(true)
     expect(apply(["$!==", (5, 7, 5), (5, 7, 5)])).toBe(false)
+    expect(apply(["$!==", ["$", "xp", "f"], 94], TheObject)).toBe(false)
+    expect(apply(["$!==", ["$", "xp", "f"], 94.5], TheObject)).toBe(true)
+    expect(apply(["$!==", ["$", "xp", "f"], ["$", "xp", "c"]], TheObject)).toBe(false)
 })
 
 test('Operador de negación.', () => {
@@ -112,11 +126,11 @@ test('Operador or.', () => {
     expect(apply(["$||", false, "", "", false, ""])).toEqual("")
 })
 
-test('Mapeo de arrays', () => {
+test('Mapeo de arrays.', () => {
     expect(apply(["$map", [1,2,3], ["$*", ["$$"], ["$$"]] ])).toEqual([1, 4, 9])
     expect(apply(["$map", ["$", "xp", "array"], ["$*", ["$$"], ["$$"]]], TheObject)).toEqual([ 16, 4, 36, 1, 46076944 ])
 })
 
-test('Aplicador de métodos', () => {
+test('Aplicador de métodos.', () => {
     expect(apply(['$method', ['$', 'key'], 'padStart', 10, '.'], TheObject)).toEqual("........xp")
 })
