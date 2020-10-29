@@ -126,11 +126,24 @@ test('Operador or.', () => {
     expect(apply(["$||", false, "", "", false, ""])).toEqual("")
 })
 
-test('Mapeo de arrays.', () => {
-    expect(apply(["$map", [1,2,3], ["$*", ["$$"], ["$$"]] ])).toEqual([1, 4, 9])
-    expect(apply(["$map", ["$", "xp", "array"], ["$*", ["$$"], ["$$"]]], TheObject)).toEqual([ 16, 4, 36, 1, 46076944 ])
+test('Aplicador de métodos.', () => {
+    expect(apply(['$()', ['$', 'key'], 'padStart', 10, '.'], TheObject)).toEqual("........xp")
 })
 
-test('Aplicador de métodos.', () => {
-    expect(apply(['$method', ['$', 'key'], 'padStart', 10, '.'], TheObject)).toEqual("........xp")
+test('Suma.', () => {
+    expect(apply(["$+", 3, "5"])).toBe(8)
+    expect(apply(["$+", 3, 5, 2, 5, 17])).toBe(32)
+    expect(apply(["$+", ["$","xp","c"], ["$","xp","f"]], TheObject)).toBe(188)
+})
+
+test('Resta.', () => {
+    expect(apply(["$-", 3, 5])).toBe(-2)
+    expect(apply(["$-", 3, "5"])).toBe(-2)
+    // expect(apply(["$-", 3, 5, 2, 5, 17])).toBe(-26)
+    expect(apply(["$-", ["$","xp","c"], ["$","xp","f"]], TheObject)).toBe(0)
+})
+
+test('Tipo de.', () => {
+    expect(apply(["$typeof", 3])).toBe("number")
+    expect(apply(["$typeof", ["xp", "a"]], TheObject)).toBe("object")
 })
